@@ -8,7 +8,11 @@
  * Author URI: http://github.com/alexesba
  */
 // Register the shortcodes
-// add_shortcode('dat_link', 'shortcode_handler_dat_link');
+//
+
+/* Register our stylesheet. */
+wp_register_style( 'datStyle', plugins_url('style.css', __FILE__) );
+wp_enqueue_style( 'datStyle' );
 add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
 
 //
@@ -38,7 +42,7 @@ function shortcode_handler_dat_terms($atts)
          'agree_button_text'   => 'I agree to the terms',
          'eula_link_url_text'  => 'terms & conditions',
          'eula_ink_text'       => 'I agree to the',
-         'alert_agree_message' => 'Please aggre with the terms and conditions',
+         'alert_agree_message' => 'Please agree with the terms and conditions',
          'eula_page_id'        => 0,
          'modal'               => 0
       ), $atts));
@@ -90,12 +94,15 @@ function shortcode_handler_dat_terms($atts)
       }
       // Function to insert the checkbox using jquery
       var InsertChekbox = function(element){
+        var container = element.find('section:last').find('a:last');
+        var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         var checbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
         var label = jQuery('<label>', { text: ' {$eula_ink_text} ', for: 'agree_eula'});
         var link = "<a class='dat_link' href='{$terms_page_url}' target='_blank'>{$eula_link_url_text}</a>";
         label.append(link);
-        element.append(checbox);
-        element.append(label);
+        eula_container.append(checbox).append(label)
+        // container.after(label);
+        container.before(eula_container);
       }
 
       var downloadFile = function(url){

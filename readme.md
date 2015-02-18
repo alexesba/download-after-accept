@@ -8,7 +8,7 @@ License: GPL2
 
 Shows a popup dialog with terms and conditions (EULA) that must be accepted before a file can be downloaded
 
-###Description 
+###Description
 Terms Before Download adds a shortcode that can be used instead of HTML anchors to link to downloadable files. If such a link is clicked a popup dialog shows terms and conditions (EULA) which must be accepted for the download to start.
 
 The terms and conditions are read from a Wordpress page. That way there is only a single place to maintain the terms and they can easily be displayed independently of the plugin.
@@ -20,7 +20,7 @@ An example of the plugin in action can be found here: http://helgeklein.com/down
 ###Usage
 
 ```
-[dat_terms  eula_page_id=20 ok_button_text='Custom agree text' dialog_title='Custom agree modalbox title' eula_ink_text='I agree with the' eula_link_url_text='terms and conditions' modal='0']
+[dat_terms  eula_page_id=20 ok_button_text='Custom agree text' modalbox_title='Custom agree modalbox title' eula_ink_text='I agree with the' eula_link_url_text='terms and conditions' modal='0']
 ```
 
 
