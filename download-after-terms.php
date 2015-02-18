@@ -7,12 +7,11 @@
  * Author: Alejandro Espinoza
  * Author URI: http://github.com/alexesba
  */
-// Register the shortcodes
-//
 
 /* Register our stylesheet. */
 wp_register_style( 'datStyle', plugins_url('style.css', __FILE__) );
 wp_enqueue_style( 'datStyle' );
+// Register the shortcodes
 add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
 
 //
@@ -94,15 +93,14 @@ function shortcode_handler_dat_terms($atts)
       }
       // Function to insert the checkbox using jquery
       var InsertChekbox = function(element){
-        var container = element.find('section:last').find('a:last');
+        var container = element.find('section:last');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         var checbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
         var label = jQuery('<label>', { text: ' {$eula_ink_text} ', for: 'agree_eula'});
         var link = "<a class='dat_link' href='{$terms_page_url}' target='_blank'>{$eula_link_url_text}</a>";
         label.append(link);
         eula_container.append(checbox).append(label)
-        // container.after(label);
-        container.before(eula_container);
+        container.prepend(eula_container);
       }
 
       var downloadFile = function(url){
