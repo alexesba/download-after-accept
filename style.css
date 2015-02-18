@@ -5,7 +5,14 @@
   width: 100%;
   text-align: right;
 }
+
 .eula-button-disabled{
   cursor: default;
   opacity: 0.5;
+}
+
+.eula-container{
+  display:block;
+  overflow: auto;
+  width: 100%;
 }

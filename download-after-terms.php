@@ -11,9 +11,55 @@
 //
 
 /* Register our stylesheet. */
-wp_register_style( 'datStyle', plugins_url('style.css', __FILE__) );
+wp_register_style( 'datStyle', plugins_url('style.css', __FILE__), array(), filemtime( get_stylesheet_directory() . '/style.css' ));
 wp_enqueue_style( 'datStyle' );
+add_shortcode('dat_terms_container', 'shortcode_handler_dat_terms_container');
 add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
+
+//Shortcode handler fucntion: inserts an container with the EULA agreement content
+//
+
+function shortcode_handler_dat_terms_container($atts){
+   extract(shortcode_atts(array(
+         'eula_page_id'  => 0,
+         'height' => '200px',
+         'padding' => '20px',
+         'class' => 'entry',
+         'margin_bottom' => '10px',
+         'modal' => 0
+      ), $atts));
+
+   if($modal)
+     return "";
+   if (empty($eula_page_id))
+      return "";
+   else{
+      $eula_content_page = parse_content_eula_page($eula_page_id);
+     $output = <<<EndOfHeredoc
+       <div class="eula-container {$class}" style='max-height:{$height} margin-bottom: {$margin_bottom}'>{$eula_content_page }</div>
+EndOfHeredoc;
+
+     return $output;
+   }
+
+}
+
+//Returns the content of the EULA page based on the ID
+//Allowed properties
+// - eula_page_id -> ID of the EULA page displayed in the dialog [required]
+function parse_content_eula_page($eula_page_id)
+{
+  $terms_page = get_post ($eula_page_id, "OBJECT", "display");
+  // Get the terms page content
+  $terms_page_content = $terms_page->post_content;
+  // Convert double line breaks into paragraphs, replacing \n with <br /> to the string
+  $terms_page_content = wpautop($terms_page_content);
+  // Remove non-printable characters
+  $terms_page_content = preg_replace('/[\x00-\x1F]/u', '', $terms_page_content);
+  // HTML-encode double quotes because the string will be enclosed in double quotes
+  $terms_page_content = str_replace ('"', "&quot;", $terms_page_content);
+  return $terms_page_content;
+}
 
 //
 // Shortcode handler function: inserts a div with the EULA agreement content
@@ -25,8 +71,6 @@ add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
 // -  padding             -> Padding between the dialog frame and the inner content [optional]
 // -  width               -> Width of the dialog [optional]
 // -  agree_button_text   -> Text for the OK button [optional]
-// -  eula_link_text      -> Text to be placed before the link to the terms and  conditions page
-// -  eula_link_url_text  -> Text to be  wrapped between the link to the terms and condition page
 // -  alert_agree_message -> Text for the alert message when the user doesn't  accept the terms using the checkbox
 // -  modal               -> boolean value(0|1) to display the EULA in a modal box.
 //
@@ -39,9 +83,7 @@ function shortcode_handler_dat_terms($atts)
          'class'               => 'entry',
          'padding'             => '20px',
          'width'               => '80%',
-         'agree_button_text'   => 'I agree to the terms',
-         'eula_link_url_text'  => 'terms & conditions',
-         'eula_ink_text'       => 'I agree to the',
+         'agree_button_text'   => 'I agree with the terms and conditions',
          'alert_agree_message' => 'Please agree with the terms and conditions',
          'eula_page_id'        => 0,
          'modal'               => 0
@@ -99,13 +141,12 @@ function shortcode_handler_dat_terms($atts)
         button.addClass('eula-button-disabled');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         var checkbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
-        var label = jQuery('<label>', { text: ' {$eula_ink_text} ', for: 'agree_eula'});
-        var link = "<a class='dat_link' href='{$terms_page_url}' target='_blank'>{$eula_link_url_text}</a>";
-        label.append(link);
+        var label = jQuery('<label>', { text: ' {$agree_button_text} ', for: 'agree_eula'});
         eula_container.append(checkbox).append(label)
         container.prepend(eula_container);
-        checkbox.on('checked', function(){
-          if(this.checked){
+
+        checkbox.on('change', function(){
+          if(!this.checked){
             button.addClass('eula-button-disabled');
           }else{
             button.removeClass('eula-button-disabled');
