@@ -138,7 +138,7 @@ function shortcode_handler_dat_terms($atts)
          'agree_button_text'        => 'I agree with the terms and conditions',
          'alert_agree_message'      => 'Please agree with the terms and conditions',
          'eula_page_id'             => get_option('dat_eula_page_id'),
-         'eula_terms_of_use_id'     => get_option('dat_eula_terms_of_use_page_id'),
+         'eula_terms_of_use_id'     => get_option('dat_terms_of_use_page_id'),
          'eula_privacy_policy_id'   => get_option('dat_privacy_policy_page_id'),
          'modal'                    => get_option('dat_modalbox_active'),
          'eula_page_text'           => get_option('dat_eula_page_text'),
