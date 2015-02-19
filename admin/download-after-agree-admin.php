@@ -34,45 +34,66 @@
       <table class="form-table">
         <tr>
           <td>
-          <label for="dat_accept_terms_url">Accept terms url:</label>
+            <label for="dat_eula_page_id">EULA Page</label>
             <?php
             wp_dropdown_pages(array(
             'echo' => 1,
             'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'dat_accept_terms_url',
+            'name' => 'dat_eula_page_id',
             'option_none_value' => '0',
-            'selected' =>get_option('dat_accept_terms_url')
-            ));?>
-          <label for="dat_protected_url">Protected download page:</label>
-            <?php
-            wp_dropdown_pages(array(
-            'echo' => 1,
-            'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'dat_protected_url',
-            'option_none_value' => '0',
-            'selected' =>get_option('dat_protected_url')
-            ));?>
-            <label for="dat_eula_dashboard_url">EULA Dashware page:</label>
-            <?php
-            wp_dropdown_pages(array(
-            'echo' => 1,
-            'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'dat_eula_dashboard_url',
-            'option_none_value' => '0',
-            'selected' =>get_option('dat_eula_dashboard_url')
+            'selected' =>get_option('dat_eula_page_id')
             ));?>
           </td>
         </tr>
         <tr>
           <td>
-            <label for="dat_eula_gopro_url">EULA Gopro page</label>
+          <label for="eula_redirect_to_accept_page_id">Accept terms url:</label>
             <?php
             wp_dropdown_pages(array(
             'echo' => 1,
             'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'dat_eula_gopro_url',
+            'name' => 'eula_redirect_to_accept_page_id',
             'option_none_value' => '0',
-            'selected' =>get_option('dat_eula_gopro_url')
+            'selected' =>get_option('eula_redirect_to_accept_page_id')
+          ));?>
+            </td>
+        </tr>
+        <tr>
+          <td>
+          <label for="dat_protected_page_id">Protected download page:</label>
+            <?php
+            wp_dropdown_pages(array(
+            'echo' => 1,
+            'show_option_none' => __( '&mdash; Select &mdash;' ),
+            'name' => 'dat_protected_page_id',
+            'option_none_value' => '0',
+            'selected' =>get_option('dat_protected_page_id')
+            ));?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="eula_terms_of_use_page_id">Terms of Use:</label>
+            <?php
+            wp_dropdown_pages(array(
+            'echo' => 1,
+            'show_option_none' => __( '&mdash; Select &mdash;' ),
+            'name' => 'eula_terms_of_use_page_id',
+            'option_none_value' => '0',
+            'selected' =>get_option('eula_terms_of_use_page_id')
+            ));?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="eula_terms_of_use_page_id">Privacy Policy:</label>
+            <?php
+            wp_dropdown_pages(array(
+            'echo' => 1,
+            'show_option_none' => __( '&mdash; Select &mdash;' ),
+            'name' => 'eula_privacy_policy_page_id',
+            'option_none_value' => '0',
+            'selected' =>get_option('eula_privacy_policy_page_id')
             ));?>
           </td>
         </tr>

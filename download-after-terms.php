@@ -35,22 +35,22 @@ add_action('admin_menu','download_after_agree_menu');
 
 //Register all the input fields
 function dat_register_settings() {
-	register_setting( 'dat_download_after_agree_options', 'dat_protected_url', 'intval');
-	register_setting( 'dat_download_after_agree_options', 'dat_eula_dashboard_url', 'intval');
-	register_setting( 'dat_download_after_agree_options', 'dat_eula_gopro_url', 'intval');
+	register_setting( 'dat_download_after_agree_options', 'dat_protected_page_id', 'intval');
+	register_setting( 'dat_download_after_agree_options', 'eula_redirect_to_accept_page_id', 'intval');
+	register_setting( 'dat_download_after_agree_options', 'dat_eula_page_id', 'intval');
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_title');
 	register_setting( 'dat_download_after_agree_options', 'dat_accept_text');
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_active');
-	register_setting( 'dat_download_after_agree_options', 'dat_accept_terms_url');
+	register_setting( 'dat_download_after_agree_options', 'eula_terms_of_use_page_id');
+	register_setting( 'dat_download_after_agree_options', 'eula_privacy_policy_page_id');
  }
 add_action( 'admin_init', 'dat_register_settings' );
 
 function cookiebasedredirect() {
   session_start();
   $cookie_name = 'eula_accepted';
-  $protected_slug_page = basename(get_permalink(get_option('dat_protected_url')));
-  $accept_terms_slug_page = get_permalink(get_option('dat_accept_terms_url'));
-
+  $protected_slug_page = basename(get_permalink(get_option('dat_protected_page_id')));
+  $accept_terms_slug_page = get_permalink(get_option('eula_redirect_to_accept_page_id'));
   // WHEN YOU HAVE FOUND YOUR COOKIE
   if ( !isset($_COOKIE[$cookie_name])) {
 
@@ -70,7 +70,7 @@ add_action("template_redirect", "cookiebasedredirect");
 // Shortcode handler fucntion: inserts an container with the EULA agreement content
 function shortcode_handler_dat_terms_container($atts){
    extract(shortcode_atts(array(
-         'eula_page_id'  => get_option('dat_eula_gopro_url'),
+         'eula_page_id'  => get_option('dat_eula_page_id'),
          'height' => '200px;',
          'padding' => '20px;',
          'class' => 'entry',
@@ -128,15 +128,16 @@ function shortcode_handler_dat_terms($atts)
 {
    // Set up attribute defaults where nothing has been specified
    extract(shortcode_atts(array(
-         'modalbox_title'      => 'Terms and Conditions',
-         'class'               => 'entry',
-         'padding'             => '20px',
-         'width'               => '80%',
-         'agree_button_text'   => 'I agree with the terms and conditions',
-         'alert_agree_message' => 'Please agree with the terms and conditions',
-         'eula_page_id'        => get_option('dat_eula_gopro_url'),
-         'eula_dashware_id'    => get_option('dat_eula_dashboard_url'),
-         'modal'               => get_option('dat_modalbox_active')
+         'modalbox_title'       => 'Terms and Conditions',
+         'class'                => 'entry',
+         'padding'              => '20px',
+         'width'                => '80%',
+         'agree_button_text'    => 'I agree with the terms and conditions',
+         'alert_agree_message'  => 'Please agree with the terms and conditions',
+         'eula_page_id'         => get_option('dat_eula_page_id'),
+         'eula_terms_of_use_id' => get_option('eula_terms_of_use_page_id'),
+         'eula_privacy_policy' => get_option('eula_privacy_policy_page_id'),
+         'modal'                => get_option('dat_modalbox_active')
       ), $atts));
 
    // Get the libraries we need
@@ -167,7 +168,7 @@ function shortcode_handler_dat_terms($atts)
      }
    }
    //Dashware terms url
-   $dashware_temrs_url = get_permalink($eula_dashware_id);
+   $dashware_temrs_url = get_permalink($eula_terms_of_use_id);
 
    // Build the output string
    $output = <<<EndOfHeredoc
