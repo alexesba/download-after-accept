@@ -86,6 +86,7 @@ function shortcode_handler_dat_terms($atts)
          'agree_button_text'   => 'I agree with the terms and conditions',
          'alert_agree_message' => 'Please agree with the terms and conditions',
          'eula_page_id'        => 0,
+         'eula_dashware_id'    => 0,
          'modal'               => 0
       ), $atts));
 
@@ -116,6 +117,8 @@ function shortcode_handler_dat_terms($atts)
        $terms_page_url = get_permalink($eula_page_id);
      }
    }
+   //Dashware terms url
+   $dashware_temrs_url = get_permalink($eula_dashware_id);
 
    // Build the output string
    $output = <<<EndOfHeredoc
@@ -142,7 +145,7 @@ function shortcode_handler_dat_terms($atts)
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         var checkbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
         var label = jQuery('<label>', { text: '', for: 'agree_eula'});
-        var link = "<a class='dat_link' href='{$terms_page_url}' target='_blank'>{$agree_button_text}</a>";
+        var link = "<a class='dat_link' href='{$dashware_temrs_url}' target='_blank'>{$agree_button_text}</a>";
         label.append(link);
         eula_container.append(checkbox).append(label)
         container.prepend(eula_container);
