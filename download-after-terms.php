@@ -200,7 +200,7 @@ function shortcode_handler_dat_terms($atts)
         var label = jQuery('<label>', { text: '', for: name});
         var link = jQuery("<a>", {class: 'dat_link', href: url,  target:'_blank', text: name });
         label.append(link);
-        eula_container.append(checkbox).append(label)
+        eula_container.append(checkbox).append(label).append(jQuery('<br>'))
         return eula_container;
       }
       // Function to insert the checkbox using jquery
