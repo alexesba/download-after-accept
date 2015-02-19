@@ -131,16 +131,19 @@ function shortcode_handler_dat_terms($atts)
 {
    // Set up attribute defaults where nothing has been specified
    extract(shortcode_atts(array(
-         'modalbox_title'       => 'Terms and Conditions',
-         'class'                => 'entry',
-         'padding'              => '20px',
-         'width'                => '80%',
-         'agree_button_text'    => 'I agree with the terms and conditions',
-         'alert_agree_message'  => 'Please agree with the terms and conditions',
-         'eula_page_id'         => get_option('dat_eula_page_id'),
-         'eula_terms_of_use_id' => get_option('dat_eula_terms_of_use_page_id'),
-         'eula_privacy_policy_id' => get_option('dat_privacy_policy_page_id'),
-         'modal'                => get_option('dat_modalbox_active')
+         'modalbox_title'           => get_option('dat_modalbox_title'),
+         'class'                    => 'entry',
+         'padding'                  => '20px',
+         'width'                    => '80%',
+         'agree_button_text'        => 'I agree with the terms and conditions',
+         'alert_agree_message'      => 'Please agree with the terms and conditions',
+         'eula_page_id'             => get_option('dat_eula_page_id'),
+         'eula_terms_of_use_id'     => get_option('dat_eula_terms_of_use_page_id'),
+         'eula_privacy_policy_id'   => get_option('dat_privacy_policy_page_id'),
+         'modal'                    => get_option('dat_modalbox_active'),
+         'eula_page_text'           => get_option('dat_eula_page_text'),
+         'terms_of_use_page_text'   => get_option('dat_terms_of_use_page_text'),
+         'privacy_policy_page_text' => get_option('dat_privacy_policy_page_text')
       ), $atts));
 
    // Get the libraries we need
@@ -173,9 +176,6 @@ function shortcode_handler_dat_terms($atts)
    //Dashware terms url
    $terms_of_use_page = get_permalink($eula_terms_of_use_id);
    $privacy_policy_page = get_permalink($eula_privacy_policy_id);
-   $eula_page_text = get_option('dat_eula_page_text');
-   $terms_of_use_page_text = get_option('dat_terms_of_use_page_text');
-   $privacy_policy_page_text = get_option('dat_privacy_policy_page_text');
 
    // Build the output string
    $output = <<<EndOfHeredoc
