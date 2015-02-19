@@ -22,10 +22,10 @@ add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
 function shortcode_handler_dat_terms_container($atts){
    extract(shortcode_atts(array(
          'eula_page_id'  => 0,
-         'height' => '200px',
-         'padding' => '20px',
+         'height' => '200px;',
+         'padding' => '20px;',
          'class' => 'entry',
-         'margin_bottom' => '10px',
+         'margin_bottom' => '10px;',
          'modal' => 0
       ), $atts));
 
@@ -141,7 +141,9 @@ function shortcode_handler_dat_terms($atts)
         button.addClass('eula-button-disabled');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         var checkbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
-        var label = jQuery('<label>', { text: ' {$agree_button_text} ', for: 'agree_eula'});
+        var label = jQuery('<label>', { text: '', for: 'agree_eula'});
+        var link = "<a class='dat_link' href='{$terms_page_url}' target='_blank'>{$agree_button_text}</a>";
+        label.append(link);
         eula_container.append(checkbox).append(label)
         container.prepend(eula_container);
 

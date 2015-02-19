@@ -1,9 +1,8 @@
 .eula-box-container{
-  clear: both;
-  display: block;
-  float: right;
-  width: 100%;
-  text-align: right;
+  position: absolute;
+  right: 30px;
+  top: 10px;
+  width: 165px;
 }
 
 .eula-button-disabled{
