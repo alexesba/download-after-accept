@@ -41,8 +41,11 @@ function dat_register_settings() {
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_title');
 	register_setting( 'dat_download_after_agree_options', 'dat_accept_text');
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_active');
-	register_setting( 'dat_download_after_agree_options', 'eula_terms_of_use_page_id');
-	register_setting( 'dat_download_after_agree_options', 'eula_privacy_policy_page_id');
+	register_setting( 'dat_download_after_agree_options', 'dat_terms_of_use_page_id');
+	register_setting( 'dat_download_after_agree_options', 'dat_privacy_policy_page_id');
+	register_setting( 'dat_download_after_agree_options', 'dat_eula_page_text');
+	register_setting( 'dat_download_after_agree_options', 'dat_terms_of_use_page_text');
+	register_setting( 'dat_download_after_agree_options', 'dat_privacy_policy_page_text');
  }
 add_action( 'admin_init', 'dat_register_settings' );
 
@@ -135,8 +138,8 @@ function shortcode_handler_dat_terms($atts)
          'agree_button_text'    => 'I agree with the terms and conditions',
          'alert_agree_message'  => 'Please agree with the terms and conditions',
          'eula_page_id'         => get_option('dat_eula_page_id'),
-         'eula_terms_of_use_id' => get_option('eula_terms_of_use_page_id'),
-         'eula_privacy_policy' => get_option('eula_privacy_policy_page_id'),
+         'eula_terms_of_use_id' => get_option('dat_eula_terms_of_use_page_id'),
+         'eula_privacy_policy_id' => get_option('dat_privacy_policy_page_id'),
          'modal'                => get_option('dat_modalbox_active')
       ), $atts));
 
@@ -164,11 +167,15 @@ function shortcode_handler_dat_terms($atts)
        $terms_page_content = str_replace ('"', "&quot;", $terms_page_content);
      }else{
        //Get the url of the EULA page
-       $terms_page_url = get_permalink($eula_page_id);
+       $eula_page = get_permalink($eula_page_id);
      }
    }
    //Dashware terms url
-   $dashware_temrs_url = get_permalink($eula_terms_of_use_id);
+   $terms_of_use_page = get_permalink($eula_terms_of_use_id);
+   $privacy_policy_page = get_permalink($eula_privacy_policy_id);
+   $eula_page_text = get_option('dat_eula_page_text');
+   $terms_of_use_page_text = get_option('dat_terms_of_use_page_text');
+   $privacy_policy_page_text = get_option('dat_privacy_policy_page_text');
 
    // Build the output string
    $output = <<<EndOfHeredoc
@@ -187,21 +194,31 @@ function shortcode_handler_dat_terms($atts)
          elements.data('url', elements.prop('href'));
          elements.removeAttr("href");
       }
+
+      var buildLink = function(eula_container, url, name){
+        var checkbox = jQuery('<input>', { type: 'checkbox', class: 'dat_checkbox',  name: 'dat_'+ name });
+        var label = jQuery('<label>', { text: '', for: name});
+        var link = jQuery("<a>", {class: 'dat_link', href: url,  target:'_blank', text: name });
+        label.append(link);
+        eula_container.append(checkbox).append(label)
+        return eula_container;
+      }
       // Function to insert the checkbox using jquery
+      var hasAcceptedTerms = function(){
+          return (jQuery('.dat_checkbox:checked').length == jQuery('.dat_checkbox').length);
+      }
       var InsertChekbox = function(element){
         var container = element.find('section:last');
         var button = container.find('a.button');
         button.addClass('eula-button-disabled');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
-        var checkbox = jQuery('<input>', { type: 'checkbox', name: 'agree_eula' });
-        var label = jQuery('<label>', { text: '', for: 'agree_eula'});
-        var link = "<a class='dat_link' href='{$dashware_temrs_url}' target='_blank'>{$agree_button_text}</a>";
-        label.append(link);
-        eula_container.append(checkbox).append(label)
+        buildLink(eula_container, '{$eula_page}', '{$eula_page_text}');
+        buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
+        buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
         container.prepend(eula_container);
 
-        checkbox.on('change', function(){
-          if(!this.checked){
+        container.find('.dat_checkbox').on('change', function(){
+          if(!hasAcceptedTerms()) {
             button.addClass('eula-button-disabled');
             jQuery.removeCookie('eula_accepted', { path: '/' });
           }else{
@@ -258,7 +275,7 @@ function shortcode_handler_dat_terms($atts)
             if($modal){
               showModalBox(url);
             }else{
-              if($('input[name="agree_eula"]').is(':checked')){
+              if(hasAcceptedTerms()){
                   downloadFile(url);
                 }else{
                  alert('{$alert_agree_message}');

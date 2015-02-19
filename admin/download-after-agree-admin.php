@@ -43,6 +43,8 @@
             'option_none_value' => '0',
             'selected' =>get_option('dat_eula_page_id')
             ));?>
+            <label for="dat_eula_page_text">Display name:</label>
+            <input type="text" name="dat_eula_page_text" value="<?php echo get_option( 'dat_eula_page_text' ); ?>"/>
           </td>
         </tr>
         <tr>
@@ -73,28 +75,32 @@
         </tr>
         <tr>
           <td>
-            <label for="eula_terms_of_use_page_id">Terms of Use:</label>
+            <label for="dat_eula_terms_of_use_page_id">Terms of Use:</label>
             <?php
             wp_dropdown_pages(array(
             'echo' => 1,
             'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'eula_terms_of_use_page_id',
+            'name' => 'dat_terms_of_use_page_id',
             'option_none_value' => '0',
-            'selected' =>get_option('eula_terms_of_use_page_id')
+            'selected' =>get_option('dat_terms_of_use_page_id')
             ));?>
+            <label for="dat_eula_page_text">Display name:</label>
+            <input type="text" name="dat_terms_of_use_page_text" value="<?php echo get_option( 'dat_terms_of_use_page_text' ); ?>"/>
           </td>
         </tr>
         <tr>
           <td>
-            <label for="eula_terms_of_use_page_id">Privacy Policy:</label>
+            <label for="dat_eula_terms_of_use_page_id">Privacy Policy:</label>
             <?php
             wp_dropdown_pages(array(
             'echo' => 1,
             'show_option_none' => __( '&mdash; Select &mdash;' ),
-            'name' => 'eula_privacy_policy_page_id',
+            'name' => 'dat_privacy_policy_page_id',
             'option_none_value' => '0',
-            'selected' =>get_option('eula_privacy_policy_page_id')
+            'selected' =>get_option('dat_privacy_policy_page_id')
             ));?>
+            <label for="dat_eula_page_text">Display name:</label>
+            <input type="text" name="dat_privacy_policy_page_text" value="<?php echo get_option( 'dat_privacy_policy_page_text' ); ?>"/>
           </td>
         </tr>
       </table>
