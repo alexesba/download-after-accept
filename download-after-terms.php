@@ -12,7 +12,9 @@
 
 /* Register our stylesheet. */
 wp_register_style( 'datStyle', plugins_url('style.css', __FILE__), array(), filemtime( get_stylesheet_directory() . '/style.css' ));
+wp_register_script( 'datScript', plugins_url('jquery.cookie.js', __FILE__), array('jquery'));
 wp_enqueue_style( 'datStyle' );
+wp_enqueue_script( 'datScript');
 add_shortcode('dat_terms_container', 'shortcode_handler_dat_terms_container');
 add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
 
@@ -25,10 +27,13 @@ function download_after_agree_menu(){
     'download_after_agree_options');
 }
 
+function download_after_agree_options(){
+  include('admin/download-after-agree-admin.php');
+}
 add_action('admin_menu','download_after_agree_menu');
 
-add_action( 'admin_init', 'dat_register_settings' );
 
+//Register all the input fields
 function dat_register_settings() {
 	register_setting( 'dat_download_after_agree_options', 'dat_protected_url', 'intval');
 	register_setting( 'dat_download_after_agree_options', 'dat_eula_dashboard_url', 'intval');
@@ -36,38 +41,33 @@ function dat_register_settings() {
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_title');
 	register_setting( 'dat_download_after_agree_options', 'dat_accept_text');
 	register_setting( 'dat_download_after_agree_options', 'dat_modalbox_active');
+	register_setting( 'dat_download_after_agree_options', 'dat_accept_terms_url');
  }
+add_action( 'admin_init', 'dat_register_settings' );
 
-function download_after_agree_options(){
-  include('admin/download-after-agree-admin.php');
-}
 function cookiebasedredirect() {
   session_start();
   $cookie_name = 'eula_accepted';
   $protected_slug_page = basename(get_permalink(get_option('dat_protected_url')));
-  if (!isset($_SESSION[$cookie_name])) {
-    if (isset($_COOKIE[$cookie_name])) {
-      $_SESSION[$cookie_name] = $_COOKIE[$cookie_name];
-    }
-  }
+  $accept_terms_slug_page = get_permalink(get_option('dat_accept_terms_url'));
+
   // WHEN YOU HAVE FOUND YOUR COOKIE
-  if ( !isset($_SESSION[$cookie_name])) {
+  if ( !isset($_COOKIE[$cookie_name])) {
 
     // GRABS THE CURRENT PAGE NAME - THIS IS ALSO KNOWS AS THE PAGE/POST SLUG
     $pagename = get_query_var('pagename');
 
     // PAGE CHECK SO THAT YOU ARE NOT IN AN INFINITE LOOP
     if( $pagename == $protected_slug_page) {
-       wp_redirect( get_site_url().'/sample-page', 301 );
+       wp_redirect( $accept_terms_slug_page, 301 );
        exit;
     }
   }
 }
+
 add_action("template_redirect", "cookiebasedredirect");
 
-//Shortcode handler fucntion: inserts an container with the EULA agreement content
-//
-
+// Shortcode handler fucntion: inserts an container with the EULA agreement content
 function shortcode_handler_dat_terms_container($atts){
    extract(shortcode_atts(array(
          'eula_page_id'  => get_option('dat_eula_gopro_url'),
@@ -202,7 +202,9 @@ function shortcode_handler_dat_terms($atts)
         checkbox.on('change', function(){
           if(!this.checked){
             button.addClass('eula-button-disabled');
+            jQuery.removeCookie('eula_accepted', { path: '/' });
           }else{
+            jQuery.cookie('eula_accepted', true, { path: '/' });
             button.removeClass('eula-button-disabled');
           }
         });

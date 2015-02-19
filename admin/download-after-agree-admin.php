@@ -34,6 +34,15 @@
       <table class="form-table">
         <tr>
           <td>
+          <label for="dat_accept_terms_url">Accept terms url:</label>
+            <?php
+            wp_dropdown_pages(array(
+            'echo' => 1,
+            'show_option_none' => __( '&mdash; Select &mdash;' ),
+            'name' => 'dat_accept_terms_url',
+            'option_none_value' => '0',
+            'selected' =>get_option('dat_accept_terms_url')
+            ));?>
           <label for="dat_protected_url">Protected download page:</label>
             <?php
             wp_dropdown_pages(array(
