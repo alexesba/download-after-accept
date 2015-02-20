@@ -217,23 +217,35 @@ function shortcode_handler_dat_terms($atts)
       var hasAcceptedTerms = function(){
           return (jQuery('.dat_checkbox:checked').length == jQuery('.dat_checkbox').length);
       }
+
+      var rejectTerms = function(){
+        button.addClass('eula-button-disabled');
+        jQuery.removeCookie('eula_accepted', { path: '/' });
+      }
+      var acceptTerms = function(){
+        jQuery.cookie('eula_accepted', true, { path: '/' });
+        var container = jQuery('.agree_download section:last');
+        var button = container.find('a.button');
+        button.removeClass('eula-button-disabled');
+      }
+
       var InsertChekbox = function(element){
         var container = element.find('section:last');
         var button = container.find('a.button');
         button.addClass('eula-button-disabled');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
         buildLink(eula_container, '{$eula_page}', '{$eula_page_text}');
-        buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
-        buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
+        if(!$modal){
+          buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
+          buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
+          }
         jQuery('.eula-checkboxes').prepend(eula_container);
 
         container.find('.dat_checkbox').on('change', function(){
           if(!hasAcceptedTerms()) {
-            button.addClass('eula-button-disabled');
-            jQuery.removeCookie('eula_accepted', { path: '/' });
+            rejectTerms();
           }else{
-            jQuery.cookie('eula_accepted', true, { path: '/' });
-            button.removeClass('eula-button-disabled');
+            acceptTerms();
           }
         });
       }
@@ -257,11 +269,13 @@ function shortcode_handler_dat_terms($atts)
                   "{$agree_button_text}": function()
                   {
                      jQuery(this).dialog("close");
+                     acceptTerms();
                      downloadFile(url);
                   },
                   Cancel: function()
                   {
-                     jQuery(this).dialog("close");
+                    rejectTerms();
+                    jQuery(this).dialog("close");
                   }
                }
             });
