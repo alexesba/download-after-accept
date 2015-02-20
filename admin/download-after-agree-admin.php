@@ -22,6 +22,12 @@
         </tr>
         <tr>
           <td>
+            <label for="dat_text_above_checkboxes">Text above the checkboxes:</label>
+            <input type="text" name="dat_text_above_checkboxes" value="<?php echo get_option( 'dat_text_above_checkboxes' ); ?>"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <label for="dat_accept_text">Accept Terms Button/Link text</label>
             <input type="text" name="dat_accept_text" value="<?php echo get_option( 'dat_accept_text' ); ?>"/>
           </td>

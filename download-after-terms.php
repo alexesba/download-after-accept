@@ -47,6 +47,7 @@ function dat_register_settings() {
 	register_setting( 'dat_download_after_agree_options', 'dat_eula_page_text');
 	register_setting( 'dat_download_after_agree_options', 'dat_terms_of_use_page_text');
 	register_setting( 'dat_download_after_agree_options', 'dat_privacy_policy_page_text');
+	register_setting( 'dat_download_after_agree_options', 'dat_text_above_checkboxes');
  }
 add_action( 'admin_init', 'dat_register_settings' );
 
@@ -73,8 +74,10 @@ add_action("template_redirect", "cookiebasedredirect");
 
 //Render the checkboxes
 function shortcode_handler_dat_terms_checkboxes(){
+  $dat_text_above_checkboxes = get_option('dat_text_above_checkboxes');
   $output = <<<EndOfHeredoc
   <div class="eula-checkboxes">
+    <p>{$dat_text_above_checkboxes}</p>
   </div>
 EndOfHeredoc;
   return $output;
@@ -242,7 +245,7 @@ function shortcode_handler_dat_terms($atts)
           buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
           buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
           }
-        checkboxContainer.prepend(eula_container);
+        checkboxContainer.append(eula_container);
         checkboxContainer.find('.dat_checkbox').on('change', function(){
           if(!hasAcceptedTerms()) {
             rejectTerms();
