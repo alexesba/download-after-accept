@@ -6,7 +6,7 @@
 }
 
 .eula-above-checkboxes{
-  margin-bottom: 0px;
+  margin-bottom: 0px !important;
 }
 .eula-box-container{
   float: left;
