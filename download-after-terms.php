@@ -215,18 +215,20 @@ function shortcode_handler_dat_terms($atts)
       }
       // Function to insert the checkbox using jquery
       var hasAcceptedTerms = function(){
-          return (jQuery('.dat_checkbox:checked').length == jQuery('.dat_checkbox').length);
+        return (jQuery('.dat_checkbox:checked').length == jQuery('.dat_checkbox').length);
       }
 
       var rejectTerms = function(){
-        button.addClass('eula-button-disabled');
+       eulaButton().addClass('eula-button-disabled');
         jQuery.removeCookie('eula_accepted', { path: '/' });
+      }
+      var eulaButton = function(){
+        var container = jQuery('.agree_download section:last');
+        return container.find('a.button');
       }
       var acceptTerms = function(){
         jQuery.cookie('eula_accepted', true, { path: '/' });
-        var container = jQuery('.agree_download section:last');
-        var button = container.find('a.button');
-        button.removeClass('eula-button-disabled');
+        eulaButton().removeClass('eula-button-disabled');
       }
 
       var InsertChekbox = function(element){
@@ -234,14 +236,14 @@ function shortcode_handler_dat_terms($atts)
         var button = container.find('a.button');
         button.addClass('eula-button-disabled');
         var eula_container = jQuery('<div>', { class: 'eula-box-container' });
+        var checkboxContainer  = jQuery('.eula-checkboxes');
         buildLink(eula_container, '{$eula_page}', '{$eula_page_text}');
         if(!$modal){
           buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
           buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
           }
-        jQuery('.eula-checkboxes').prepend(eula_container);
-
-        container.find('.dat_checkbox').on('change', function(){
+        checkboxContainer.prepend(eula_container);
+        checkboxContainer.find('.dat_checkbox').on('change', function(){
           if(!hasAcceptedTerms()) {
             rejectTerms();
           }else{
