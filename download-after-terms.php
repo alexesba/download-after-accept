@@ -17,6 +17,7 @@ wp_enqueue_style( 'datStyle' );
 wp_enqueue_script( 'datScript');
 add_shortcode('dat_terms_container', 'shortcode_handler_dat_terms_container');
 add_shortcode('dat_terms', 'shortcode_handler_dat_terms');
+add_shortcode('dat_terms_checkboxes', 'shortcode_handler_dat_terms_checkboxes');
 
 
 function download_after_agree_menu(){
@@ -69,6 +70,15 @@ function cookiebasedredirect() {
 }
 
 add_action("template_redirect", "cookiebasedredirect");
+
+//Render the checkboxes
+function shortcode_handler_dat_terms_checkboxes(){
+  $output = <<<EndOfHeredoc
+  <div class="eula-checkboxes">
+  </div>
+EndOfHeredoc;
+  return $output;
+}
 
 // Shortcode handler fucntion: inserts an container with the EULA agreement content
 function shortcode_handler_dat_terms_container($atts){
@@ -215,7 +225,7 @@ function shortcode_handler_dat_terms($atts)
         buildLink(eula_container, '{$eula_page}', '{$eula_page_text}');
         buildLink(eula_container, '{$terms_of_use_page}', '{$terms_of_use_page_text}');
         buildLink(eula_container, '{$privacy_policy_page}', '{$privacy_policy_page_text}');
-        container.prepend(eula_container);
+        jQuery('.eula-checkboxes').prepend(eula_container);
 
         container.find('.dat_checkbox').on('change', function(){
           if(!hasAcceptedTerms()) {
