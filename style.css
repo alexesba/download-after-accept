@@ -1,10 +1,13 @@
 .eula-checkboxes{
   display: block;
-  height: 62px;
+  height: 85px;
   position: relative;
   width: 100%;
 }
 
+.eula-above-checkboxes{
+  margin-bottom: 0px;
+}
 .eula-box-container{
   float: left;
   display: block;

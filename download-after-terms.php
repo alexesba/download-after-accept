@@ -77,7 +77,7 @@ function shortcode_handler_dat_terms_checkboxes(){
   $dat_text_above_checkboxes = get_option('dat_text_above_checkboxes');
   $output = <<<EndOfHeredoc
   <div class="eula-checkboxes">
-    <p>{$dat_text_above_checkboxes}</p>
+    <p class="eula-above-checkboxes">{$dat_text_above_checkboxes}</p>
   </div>
 EndOfHeredoc;
   return $output;
